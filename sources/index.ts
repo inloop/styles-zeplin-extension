@@ -1,72 +1,88 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ViewStyle_1 = require("./ViewStyle");
-var interfaces_1 = require("./interfaces");
-function layer(context, selectedLayer) {
+import ViewStyle from './ViewStyle';
+import { IContext, ILayer, LayerType } from './interfaces';
+
+function layer(context: IContext, selectedLayer: ILayer) {
     // return {
     //     code: viewStyle(context, selectedLayer),
     //     language: "swift"
     // };
-    var style;
+
+    let style: string;
+
     switch (selectedLayer.type) {
-        case interfaces_1.LayerType.text:
+        case LayerType.text:
             style = "TODO: text layer";
             break;
-        case interfaces_1.LayerType.shape:
-            style = new ViewStyle_1.default(selectedLayer, context).generate();
+        case LayerType.shape:
+            style = new ViewStyle(selectedLayer, context).generate();
             break;
         default:
-            style = "Unknown layer type: " + selectedLayer.type;
+            style = `Unknown layer type: ${selectedLayer.type}`
             break;
     }
+
     // const object = {
     //     "layer": selectedLayer,
     //     // "context": context,
     //     "code": style,
     //     "function": "layer"
     // };
+
     // const JSONString = JSON.stringify(object, null, 2);
+
     return {
         code: style,
         language: "swift"
     };
 }
+
 function styleguideColors(context, colors) {
+
 }
+
 function styleguideTextStyles(context, colors) {
-    var object = {
+    const object = {
         "layerName": colors,
         "projectName": context.project.name,
         "function": "styleguideTextStyle"
     };
-    var JSONString = JSON.stringify(object, null, 2);
+
+    const JSONString = JSON.stringify(object, null, 2);
+
     return {
         code: JSONString,
         language: "json"
-    };
+    }
 }
+
 function exportStyleguideColors(context, colors) {
+
 }
+
 function exportStyleguideTextStyles(context, colors) {
-    var object = {
+    const object = {
         "layerName": colors,
         "projectName": context.project.name,
         "function": "exportStyleguideTextStyles"
     };
-    var JSONString = JSON.stringify(object, null, 2);
+
+    const JSONString = JSON.stringify(object, null, 2);
+
     return {
         code: JSONString,
         language: "json"
-    };
+    }
 }
+
 function comment(context, text) {
-    return "Styles Comment !";
+    return "Styles Comment !"
 }
-exports.default = {
-    layer: layer,
-    styleguideColors: styleguideColors,
-    styleguideTextStyles: styleguideTextStyles,
-    exportStyleguideColors: exportStyleguideColors,
-    exportStyleguideTextStyles: exportStyleguideTextStyles,
-    comment: comment
+
+export default {
+    layer,
+    styleguideColors,
+    styleguideTextStyles,
+    exportStyleguideColors,
+    exportStyleguideTextStyles,
+    comment
 };
