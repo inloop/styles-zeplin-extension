@@ -5,50 +5,96 @@
 
 'use strict';
 
-String.prototype.toCamelCase = function () {
-    return this.replace(/^([A-Z])|\s(\w)/g, function (match, p1, p2, offset) {
-        if (p2) return p2.toUpperCase();
-        return p1.toLowerCase();
-    });
-};
+var camelCase = require('mout/string/camelCase');
 
 class ViewStyleBuilder {
-    constructor() {
+    constructor(context, layer) {
+        this.project = context.project;
+        this.layer = layer;
+        this.name = camelCase(layer.name);
         this.props = [];
     }
 
-    addCornerRadius(radius) {
-        if (radius === null || radius == 0) { return; }
-        this.props.push(`.cornerRadius(${radius})`);
+    addCornerRadius() {
+        if (!this.layer.borderRadius) { return this; }
+        this.props.push(`.cornerRadius(${this.layer.borderRadius})`);
         return this;
     }
 
-    addFills(fills) {
-        var _this = this;
-        fills.forEach(function (f) {
-            _this.props.push(`.backgroundColor(.rgba(${f.color.r}, ${f.color.g}, ${f.color.b}, ${f.color.a}))`);
-            _this.props.push(`.opacity(${f.color.a})`);
-        });
-        return this
+    addFills() {
+        var fill = this.layer.fills[0];
+
+        if (!fill) {
+            return this;
+        }
+
+        this.addBackgroundColor(fill.color);
+
+        return this;
     }
 
-    construct(name) {
-        return `static let ${name.toCamelCase()} = ViewStyle(\n\t${this.props.join(',\n\t')}\n)`;
+    addBackgroundColor(color) {
+        var namedColor = this.project.findColorEqual(color);
+        if (namedColor && namedColor.name) {
+            this.props.push(`.backgroundColor(.${namedColor.name})`);
+        } else {
+            this.props.push(`.backgroundColor(.rgba(${color.r}, ${color.g}, ${color.b}, ${color.a}))`);
+        }
+    }
+
+    addOpacity() {
+        if (this.layer.opacity == 1) { return this; }
+        this.props.push(`.opacity(${this.layer.opacity})`);
+        return this;
+    }
+
+    construct() {
+        if (this.props.length == 0) { return; }
+        return `static let ${this.name} = ViewStyle(\n\t${this.props.join(',\n\t')}\n)`;
     }
 }
 
 function layer(context, selectedLayer) {
+    // return {
+    //     code: viewStyle(context, selectedLayer),
+    //     language: "swift"
+    // };
+
+    var style;
+
+    switch (selectedLayer.type) {
+        case "text":
+            style = "TODO: text layer";
+            break;
+        case "shape":
+            style = viewStyle(context, selectedLayer);
+            break;
+        default:
+            style = `Unknown layer type: ${selectedLayer.type}`
+            break;
+    }
+
+    const object = {
+        "layer": selectedLayer,
+        // "context": context,
+        "code": style,
+        "function": "layer"
+    };
+
+    const JSONString = JSON.stringify(object, null, 2);
+
     return {
-        code: viewStyle(selectedLayer),
-        language: "swift"
+        code: JSONString,
+        language: "json"
     };
 }
 
-function viewStyle(layer) {
-    return new ViewStyleBuilder()
-        .addCornerRadius(layer.borderRadius)
-        .addFills(layer.fills)
-        .construct(layer.name);
+function viewStyle(context, layer) {
+    return new ViewStyleBuilder(context, layer)
+        .addCornerRadius()
+        .addFills()
+        .addOpacity()
+        .construct();
 }
 
 function styleguideColors(context, colors) {
@@ -95,9 +141,9 @@ function comment(context, text) {
 
 export default {
     layer,
-    // styleguideColors,
+    styleguideColors,
     styleguideTextStyles,
-    // exportStyleguideColors,
+    exportStyleguideColors,
     exportStyleguideTextStyles,
-    // comment
+    comment
 };
