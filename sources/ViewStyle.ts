@@ -19,6 +19,7 @@ class ViewStyle {
         this.generateFill();
         this.generateOpacity();
         this.generateBorders();
+        this.generateShadow();
 
         if (this.props.length == 0) {
             return;
@@ -73,6 +74,21 @@ class ViewStyle {
         let border = this.layer.borders[0];
         this.props.push(".borderWidth(" + border.thickness + ")");
         this.props.push(".borderColor(" + this.uicolor(border.fill.color) + ")");
+    }
+
+    private generateShadow() {
+        if (this.layer.shadows.length == 0) {
+            return;
+        }
+
+        let shadow = this.layer.shadows[0];
+        let shadowName = this.name + "Shadow";
+        var shadowString = "Shadow(\n\t\tcolor: "
+            + this.uicolor(shadow.color)
+            + ",\n\t\toffset: UIOffset(horizontal: " + shadow.offsetX + ", vertical: " + shadow.offsetY + ")"
+            + ",\n\t\tradius: " + shadow.blurRadius
+            + "\n\t)";
+        this.props.push(".shadow(" + shadowString + ")");
     }
 }
 

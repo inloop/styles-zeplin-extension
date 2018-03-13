@@ -13,6 +13,7 @@ var ViewStyle = /** @class */ (function () {
         this.generateFill();
         this.generateOpacity();
         this.generateBorders();
+        this.generateShadow();
         if (this.props.length == 0) {
             return;
         }
@@ -58,6 +59,19 @@ var ViewStyle = /** @class */ (function () {
         var border = this.layer.borders[0];
         this.props.push(".borderWidth(" + border.thickness + ")");
         this.props.push(".borderColor(" + this.uicolor(border.fill.color) + ")");
+    };
+    ViewStyle.prototype.generateShadow = function () {
+        if (this.layer.shadows.length == 0) {
+            return;
+        }
+        var shadow = this.layer.shadows[0];
+        var shadowName = this.name + "Shadow";
+        var shadowString = "Shadow(\n\t\tcolor: "
+            + this.uicolor(shadow.color)
+            + ",\n\t\toffset: UIOffset(horizontal: " + shadow.offsetX + ", vertical: " + shadow.offsetY + ")"
+            + ",\n\t\tradius: " + shadow.blurRadius
+            + "\n\t)";
+        this.props.push(".shadow(" + shadowString + ")");
     };
     return ViewStyle;
 }());
