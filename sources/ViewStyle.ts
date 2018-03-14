@@ -1,13 +1,13 @@
 import camelCase = require('mout/string/camelCase');
-import * as Interfaces from './Interfaces';
+import { IContext, ILayer, IProject, IColor } from './Interfaces';
 
 class ViewStyle {
-    layer: Interfaces.ILayer
-    project: Interfaces.IProject
-    props: string[]
-    name: string
+    private layer: ILayer
+    private project: IProject
+    private props: string[]
+    private name: string
 
-    constructor(layer: Interfaces.ILayer, context: Interfaces.IContext) {
+    constructor(layer: ILayer, context: IContext) {
         this.layer = layer;
         this.project = context.project;
         this.props = [];
@@ -45,7 +45,7 @@ class ViewStyle {
         this.props.push(colorString);
     }
 
-    private uicolor(color: Interfaces.IColor): string {
+    private uicolor(color: IColor): string {
         let namedColor = this.project.findColorEqual(color);
         let colorString: string;
 
