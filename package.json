@@ -4,7 +4,7 @@
   "description": "Extensions for Styles framework. (https://github.com/inloop/Styles)",
   "scripts": {
     "start": "concurrently \"zem start\" \"tsc ./sources/*.ts --watch --outDir ./src --allowJs --target \"es5\"\"",
-    "build": "zem build",
+    "build": "tsc && zem build",
     "clean": "zem clean",
     "exec": "zem exec"
   },
@@ -15,8 +15,9 @@
     ]
   },
   "dependencies": {
-    "zem": "^0.1.2",
-    "mout": "^1.1.0"
+    "concurrently": "^3.5.1",
+    "mout": "^1.1.0",
+    "zem": "^0.1.2"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^4.0.1",
