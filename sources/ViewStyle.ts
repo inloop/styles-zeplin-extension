@@ -24,14 +24,14 @@ class ViewStyle {
         if (this.props.length == 0) {
             return;
         }
-        return "let " + this.name + " = ViewStyle(\n\t" + this.props.join(',\n\t') + "\n)";
+        return `let ` + this.name + ` = ViewStyle(\n\t` + this.props.join(',\n\t') + `\n)`;
     }
 
     private generateCornerRadius() {
         if (!this.layer.borderRadius) {
             return
         }
-        this.props.push(".cornerRadius(" + this.layer.borderRadius + ")");
+        this.props.push(`.cornerRadius(` + this.layer.borderRadius + `)`);
     }
 
     private generateFill() {
@@ -41,7 +41,7 @@ class ViewStyle {
         }
 
         let color = fill.color;
-        let colorString = ".backgroundColor(" + uicolor(color, this.project) + ")";
+        let colorString = `.backgroundColor(` + uicolor(color, this.project) + `)`;
         this.props.push(colorString);
     }
 
@@ -49,7 +49,7 @@ class ViewStyle {
         if (this.layer.opacity === null || this.layer.opacity == 1) {
             return
         }
-        this.props.push(".opacity(" + this.layer.opacity + ")");
+        this.props.push(`.opacity(` + this.layer.opacity + `)`);
     }
 
     private generateBorders() {
@@ -59,8 +59,8 @@ class ViewStyle {
         }
 
         let border = this.layer.borders[0];
-        this.props.push(".borderWidth(" + border.thickness + ")");
-        this.props.push(".borderColor(" + uicolor(border.fill.color, this.project) + ")");
+        this.props.push(`.borderWidth(` + border.thickness + `)`);
+        this.props.push(`.borderColor(` + uicolor(border.fill.color, this.project) + `)`);
     }
 
     private generateShadow() {
@@ -69,13 +69,13 @@ class ViewStyle {
         }
 
         let shadow = this.layer.shadows[0];
-        let shadowName = this.name + "Shadow";
-        var shadowString = "Shadow(\n\t\tcolor: "
+        let shadowName = this.name + `Shadow`;
+        var shadowString = `Shadow(\n\t\tcolor: `
             + uicolor(shadow.color, this.project)
-            + ",\n\t\toffset: UIOffset(horizontal: " + shadow.offsetX + ", vertical: " + shadow.offsetY + ")"
-            + ",\n\t\tradius: " + shadow.blurRadius
-            + "\n\t)";
-        this.props.push(".shadow(" + shadowString + ")");
+            + `,\n\t\toffset: UIOffset(horizontal: ` + shadow.offsetX + `, vertical: ` + shadow.offsetY + `)`
+            + `,\n\t\tradius: ` + shadow.blurRadius
+            + `\n\t)`;
+        this.props.push(`.shadow(` + shadowString + `)`);
     }
 }
 

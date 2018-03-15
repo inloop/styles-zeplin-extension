@@ -24,7 +24,7 @@ var TextStyle = /** @class */ (function () {
             name = Utils_1.normalize(namedTextStyle.name, "text");
         }
         else {
-            name = Utils_1.normalize(this.layer.name, "text", index.toString());
+            name = Utils_1.normalize(this.layer.name, "text", index ? index.toString() : null);
         }
         this.name = name;
     };

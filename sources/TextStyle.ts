@@ -36,7 +36,7 @@ class TextStyle {
         if (namedTextStyle) {
             name = normalize(namedTextStyle.name, "text");
         } else {
-            name = normalize(this.layer.name, "text", index.toString());
+            name = normalize(this.layer.name, "text", index ? index.toString() : null);
         }
         this.name = name;
     }

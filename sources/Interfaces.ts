@@ -56,7 +56,7 @@ export interface ILayer {
     borders: IBorder[]
     fills: IFill[]
     shadows: IShadow[]
-    textStyles: any[]
+    textStyles: IRangedTextStyle[]
     type: LayerType
     name: string
     exportable: boolean
