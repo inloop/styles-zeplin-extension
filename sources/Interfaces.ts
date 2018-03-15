@@ -56,7 +56,7 @@ export interface ILayer {
     borders: IBorder[]
     fills: IFill[]
     shadows: IShadow[]
-    textStyles: any[]
+    textStyles: IRangedTextStyle[]
     type: LayerType
     name: string
     exportable: boolean
@@ -70,6 +70,13 @@ export interface ILayer {
     assets: any[]
 }
 
+export enum TextAlign {
+    left = "left",
+    right = "right",
+    center = "center",
+    justify = "justify"
+}
+
 export interface ITextStyle {
     name: string
     fontFace: string
@@ -79,7 +86,7 @@ export interface ITextStyle {
     fontFamily: string
     fontStretch: string
     lineHeight: number
-    textAlign: string
+    textAlign: TextAlign
     letterSpacing: number
     color: IColor
     weightText: string
@@ -105,4 +112,14 @@ export interface IContext {
     project: IProject
 
     getOption(name: string): any
+}
+
+export interface IRange {
+    start: number
+    end: number
+}
+
+export interface IRangedTextStyle {
+    range: IRange
+    textStyle: ITextStyle
 }

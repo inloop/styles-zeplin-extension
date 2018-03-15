@@ -21,3 +21,10 @@ var LayerType;
     LayerType["text"] = "text";
     LayerType["shape"] = "shape";
 })(LayerType = exports.LayerType || (exports.LayerType = {}));
+var TextAlign;
+(function (TextAlign) {
+    TextAlign["left"] = "left";
+    TextAlign["right"] = "right";
+    TextAlign["center"] = "center";
+    TextAlign["justify"] = "justify";
+})(TextAlign = exports.TextAlign || (exports.TextAlign = {}));
