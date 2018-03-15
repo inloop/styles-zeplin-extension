@@ -1,7 +1,7 @@
 {
   "name": "styles",
   "version": "0.1.0",
-  "description": "Extensions for Styles framework. (https://github.com/inloop/Styles)",
+  "description": "Zeplin extension for Styles framework. (https://github.com/inloop/Styles)",
   "scripts": {
     "start": "concurrently \"zem start\" \"tsc ./sources/*.ts --watch --outDir ./src --allowJs --target \"es5\"\"",
     "build": "tsc && zem build",
