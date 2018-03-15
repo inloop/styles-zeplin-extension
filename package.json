@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Sample extension description.",
   "scripts": {
-    "start": "zem start",
+    "start": "concurrently \"zem start\" \"tsc ./sources/*.ts --watch --outDir ./src --allowJs --target \"es5\"\"",
     "build": "zem build",
     "clean": "zem clean",
     "exec": "zem exec"

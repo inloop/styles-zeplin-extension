@@ -1,5 +1,6 @@
 import ViewStyle from './ViewStyle';
-import { IContext, ILayer, LayerType } from './interfaces';
+import TextStyle from './TextStyle';
+import { IContext, ILayer, LayerType, IRangedTextStyle } from './Interfaces';
 
 function layer(context: IContext, selectedLayer: ILayer) {
     // return {
@@ -11,7 +12,10 @@ function layer(context: IContext, selectedLayer: ILayer) {
 
     switch (selectedLayer.type) {
         case LayerType.text:
-            style = "TODO: text layer";
+            let styles = selectedLayer.textStyles.map((ranged: IRangedTextStyle, i) => {
+                return new TextStyle(ranged, selectedLayer, context.project, i).generate();
+            })
+            style = styles.join('\n\n');
             break;
         case LayerType.shape:
             style = new ViewStyle(selectedLayer, context).generate();

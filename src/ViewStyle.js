@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var camelCase = require("mout/string/camelCase");
+var Utils_1 = require("./Utils");
 var ViewStyle = /** @class */ (function () {
     function ViewStyle(layer, context) {
         this.layer = layer;
         this.project = context.project;
         this.props = [];
-        this.name = camelCase(layer.name);
+        this.name = Utils_1.normalize(layer.name);
     }
     ViewStyle.prototype.generate = function () {
         this.generateCornerRadius();
@@ -31,19 +31,8 @@ var ViewStyle = /** @class */ (function () {
             return;
         }
         var color = fill.color;
-        var colorString = ".backgroundColor(" + this.uicolor(color) + ")";
+        var colorString = ".backgroundColor(" + Utils_1.uicolor(color, this.project) + ")";
         this.props.push(colorString);
-    };
-    ViewStyle.prototype.uicolor = function (color) {
-        var namedColor = this.project.findColorEqual(color);
-        var colorString;
-        if (namedColor && namedColor.name) {
-            colorString = "." + namedColor.name;
-        }
-        else {
-            colorString = ".rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + color.a + ")";
-        }
-        return colorString;
     };
     ViewStyle.prototype.generateOpacity = function () {
         if (this.layer.opacity === null || this.layer.opacity == 1) {
@@ -58,7 +47,7 @@ var ViewStyle = /** @class */ (function () {
         }
         var border = this.layer.borders[0];
         this.props.push(".borderWidth(" + border.thickness + ")");
-        this.props.push(".borderColor(" + this.uicolor(border.fill.color) + ")");
+        this.props.push(".borderColor(" + Utils_1.uicolor(border.fill.color, this.project) + ")");
     };
     ViewStyle.prototype.generateShadow = function () {
         if (this.layer.shadows.length == 0) {
@@ -67,7 +56,7 @@ var ViewStyle = /** @class */ (function () {
         var shadow = this.layer.shadows[0];
         var shadowName = this.name + "Shadow";
         var shadowString = "Shadow(\n\t\tcolor: "
-            + this.uicolor(shadow.color)
+            + Utils_1.uicolor(shadow.color, this.project)
             + ",\n\t\toffset: UIOffset(horizontal: " + shadow.offsetX + ", vertical: " + shadow.offsetY + ")"
             + ",\n\t\tradius: " + shadow.blurRadius
             + "\n\t)";

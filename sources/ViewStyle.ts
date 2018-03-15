@@ -1,5 +1,5 @@
-import camelCase = require('mout/string/camelCase');
 import { IContext, ILayer, IProject, IColor } from './Interfaces';
+import { normalize, uicolor } from "./Utils";
 
 class ViewStyle {
     private layer: ILayer
@@ -11,7 +11,7 @@ class ViewStyle {
         this.layer = layer;
         this.project = context.project;
         this.props = [];
-        this.name = camelCase(layer.name);
+        this.name = normalize(layer.name);
     }
 
     generate() {
@@ -41,21 +41,8 @@ class ViewStyle {
         }
 
         let color = fill.color;
-        let colorString = ".backgroundColor(" + this.uicolor(color) + ")";
+        let colorString = ".backgroundColor(" + uicolor(color, this.project) + ")";
         this.props.push(colorString);
-    }
-
-    private uicolor(color: IColor): string {
-        let namedColor = this.project.findColorEqual(color);
-        let colorString: string;
-
-        if (namedColor && namedColor.name) {
-            colorString = "." + namedColor.name
-        }
-        else {
-            colorString = ".rgba(" + color.r + ", " + color.g + ", " + color.b + ", " + color.a + ")";
-        }
-        return colorString
     }
 
     private generateOpacity() {
@@ -73,7 +60,7 @@ class ViewStyle {
 
         let border = this.layer.borders[0];
         this.props.push(".borderWidth(" + border.thickness + ")");
-        this.props.push(".borderColor(" + this.uicolor(border.fill.color) + ")");
+        this.props.push(".borderColor(" + uicolor(border.fill.color, this.project) + ")");
     }
 
     private generateShadow() {
@@ -84,7 +71,7 @@ class ViewStyle {
         let shadow = this.layer.shadows[0];
         let shadowName = this.name + "Shadow";
         var shadowString = "Shadow(\n\t\tcolor: "
-            + this.uicolor(shadow.color)
+            + uicolor(shadow.color, this.project)
             + ",\n\t\toffset: UIOffset(horizontal: " + shadow.offsetX + ", vertical: " + shadow.offsetY + ")"
             + ",\n\t\tradius: " + shadow.blurRadius
             + "\n\t)";

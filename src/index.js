@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ViewStyle_1 = require("./ViewStyle");
-var interfaces_1 = require("./interfaces");
+var TextStyle_1 = require("./TextStyle");
+var Interfaces_1 = require("./Interfaces");
 function layer(context, selectedLayer) {
     // return {
     //     code: viewStyle(context, selectedLayer),
@@ -9,10 +10,13 @@ function layer(context, selectedLayer) {
     // };
     var style;
     switch (selectedLayer.type) {
-        case interfaces_1.LayerType.text:
-            style = "TODO: text layer";
+        case Interfaces_1.LayerType.text:
+            var styles = selectedLayer.textStyles.map(function (ranged, i) {
+                return new TextStyle_1.default(ranged, selectedLayer, context.project, i).generate();
+            });
+            style = styles.join('\n\n');
             break;
-        case interfaces_1.LayerType.shape:
+        case Interfaces_1.LayerType.shape:
             style = new ViewStyle_1.default(selectedLayer, context).generate();
             break;
         default:
