@@ -1,17 +1,23 @@
 import ViewStyle from './ViewStyle';
-import { IContext, ILayer, LayerType } from './interfaces';
+import TextStyle from './TextStyle';
+import { IContext, ILayer, LayerType, IRangedTextStyle } from './Interfaces';
 
 function layer(context: IContext, selectedLayer: ILayer) {
-    // return {
-    //     code: viewStyle(context, selectedLayer),
-    //     language: "swift"
-    // };
-
     let style: string;
 
     switch (selectedLayer.type) {
         case LayerType.text:
-            style = "TODO: text layer";
+            if (selectedLayer.textStyles.length == 1) {
+                style = new TextStyle(
+                    selectedLayer.textStyles[0],
+                    selectedLayer,
+                    context.project
+                ).generate();
+            } else {
+                style = selectedLayer.textStyles.map((ranged, i) => {
+                    return new TextStyle(ranged, selectedLayer, context.project, i).generate();
+                }).join('\n\n');
+            }
             break;
         case LayerType.shape:
             style = new ViewStyle(selectedLayer, context).generate();
@@ -20,15 +26,6 @@ function layer(context: IContext, selectedLayer: ILayer) {
             style = `Unknown layer type: ${selectedLayer.type}`
             break;
     }
-
-    // const object = {
-    //     "layer": selectedLayer,
-    //     // "context": context,
-    //     "code": style,
-    //     "function": "layer"
-    // };
-
-    // const JSONString = JSON.stringify(object, null, 2);
 
     return {
         code: style,
