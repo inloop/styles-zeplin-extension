@@ -4,7 +4,8 @@ import {
     IProject,
     IRangedTextStyle,
     ILayer,
-    TextAlign
+    TextAlign,
+    IColor
 } from "./Interfaces";
 import { normalize, uicolor, notEmpty } from "./Utils";
 
@@ -23,6 +24,7 @@ class TextStyle {
         this.generateForegroundColor();
         this.generateFont();
         this.generateParagraphStyle();
+        this.generateLetterSpacing();
     }
 
     toString(): string {
@@ -83,8 +85,28 @@ class TextStyle {
     }
 
     private generateForegroundColor() {
-        let color = `.foregroundColor(` + uicolor(this.textStyle.color, this.project) + `)`;
-        this.props.push(color);
+        let color: IColor;
+        if (!this.textStyle.color) {
+            color = this.layer.fills[0].color;
+        } else {
+            color = this.textStyle.color;
+        }
+
+        if (color == null) {
+            return;
+        }
+
+        let colorString = `.foregroundColor(` + uicolor(color, this.project) + `)`;
+        this.props.push(colorString);
+    }
+
+    private generateLetterSpacing() {
+        let spacing = this.textStyle.letterSpacing;
+        if (spacing == null) {
+            return;
+        }
+        let letterSpacing = `.letterSpacing(` + spacing.toFixed(1) + `)`;
+        this.props.push(letterSpacing);
     }
 }
 
