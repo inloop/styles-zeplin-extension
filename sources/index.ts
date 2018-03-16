@@ -9,22 +9,39 @@ function layer(context: IContext, selectedLayer: ILayer) {
         case LayerType.text:
             if (selectedLayer.textStyles.length == 1) {
                 style = new TextStyle(
-                    selectedLayer.textStyles[0],
+                    selectedLayer.textStyles[0].textStyle,
                     selectedLayer,
                     context.project
-                ).generate();
+                ).toString();
             } else {
-                style = selectedLayer.textStyles.map((ranged, i) => {
-                    return new TextStyle(ranged, selectedLayer, context.project, i).generate();
-                }).join('\n\n');
+                style = selectedLayer.textStyles
+                    .map((ranges) => {
+                        return ranges.textStyle;
+                    })
+                    .filter((element, position, array) => {
+                        return array.index((e) => { return element.equals(e); }) == position;
+                    })
+                    .map((textStyle, i) => {
+                        return new TextStyle(textStyle, selectedLayer, context.project, i + 1).toString();
+                    })
+                    .join('\n\n');
             }
             break;
         case LayerType.shape:
-            style = new ViewStyle(selectedLayer, context).generate();
+            style = new ViewStyle(selectedLayer, context).toString();
             break;
         default:
-            style = `Unknown layer type: ${selectedLayer.type}`
-            break;
+            const object = {
+                "layerType": selectedLayer.type,
+                "layer": selectedLayer
+            };
+
+            const JSONString = JSON.stringify(object, null, 2);
+
+            return {
+                code: JSONString,
+                language: "json"
+            }
     }
 
     return {
@@ -33,53 +50,6 @@ function layer(context: IContext, selectedLayer: ILayer) {
     };
 }
 
-function styleguideColors(context, colors) {
-
-}
-
-function styleguideTextStyles(context, colors) {
-    const object = {
-        "layerName": colors,
-        "projectName": context.project.name,
-        "function": "styleguideTextStyle"
-    };
-
-    const JSONString = JSON.stringify(object, null, 2);
-
-    return {
-        code: JSONString,
-        language: "json"
-    }
-}
-
-function exportStyleguideColors(context, colors) {
-
-}
-
-function exportStyleguideTextStyles(context, colors) {
-    const object = {
-        "layerName": colors,
-        "projectName": context.project.name,
-        "function": "exportStyleguideTextStyles"
-    };
-
-    const JSONString = JSON.stringify(object, null, 2);
-
-    return {
-        code: JSONString,
-        language: "json"
-    }
-}
-
-function comment(context, text) {
-    return "Styles Comment !"
-}
-
 export default {
-    layer,
-    styleguideColors,
-    styleguideTextStyles,
-    exportStyleguideColors,
-    exportStyleguideTextStyles,
-    comment
+    layer
 };

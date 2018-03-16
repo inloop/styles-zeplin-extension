@@ -90,6 +90,8 @@ export interface ITextStyle {
     letterSpacing: number
     color: IColor
     weightText: string
+
+    equals(other: ITextStyle): boolean
 }
 
 export interface IProject {

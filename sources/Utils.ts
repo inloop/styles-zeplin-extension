@@ -1,3 +1,4 @@
+///<reference path="Annotations.d.ts" />
 import camelCase = require('mout/string/camelCase');
 import { IColor, IProject } from './Interfaces';
 
@@ -35,6 +36,16 @@ export function uicolor(color: IColor, project: IProject): string {
     return colorString
 }
 
-export function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+export function notEmpty<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
+}
+
+Array.prototype.index = function <T>(where: (element: T) => boolean): number {
+    for (let i = 0; i < this.length; i++) {
+        let element = this[i];
+        if (where(element)) {
+            return i;
+        }
+    }
+    return null;
 }

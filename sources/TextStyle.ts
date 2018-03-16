@@ -15,17 +15,20 @@ class TextStyle {
     private name: string;
     private props: string[] = [];
 
-    constructor(rangedTextStyle: IRangedTextStyle, layer: ILayer, project: IProject, index?: number) {
-        this.textStyle = rangedTextStyle.textStyle;
+    constructor(textStyle: ITextStyle, layer: ILayer, project: IProject, index?: number) {
+        this.textStyle = textStyle;
         this.layer = layer;
         this.project = project;
         this.generateName(index);
-    }
-
-    generate(): string {
         this.generateForegroundColor();
         this.generateFont();
         this.generateParagraphStyle();
+    }
+
+    toString(): string {
+        if (this.props.length == 0) {
+            return null;
+        }
         let propsString = this.props.join(`,\n\t`);
         return `let ` + this.name + ` = TextStyle(\n\t` + propsString + `\n)`;
     }
@@ -36,7 +39,13 @@ class TextStyle {
         if (namedTextStyle) {
             name = normalize(namedTextStyle.name, "text");
         } else {
-            name = normalize(this.layer.name, "text", index ? index.toString() : null);
+            let suffix: string
+            if (index == null) {
+                suffix = null;
+            } else {
+                suffix = index.toString();
+            }
+            name = normalize(this.layer.name, "text", suffix);
         }
         this.name = name;
     }
@@ -54,7 +63,7 @@ class TextStyle {
             this.lineHeight
         ].filter(notEmpty);
 
-        let style = `.paragraphStyle([\n\t\t` + properties.join(`\n\t\t`) + `\n\t])`;
+        let style = `.paragraphStyle([\n\t\t` + properties.join(`,\n\t\t`) + `\n\t])`;
         this.props.push(style);
     }
 

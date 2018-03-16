@@ -11,18 +11,17 @@ class ViewStyle {
         this.layer = layer;
         this.project = context.project;
         this.props = [];
-        this.name = normalize(layer.name);
-    }
-
-    generate() {
+        this.name = normalize(layer.name, `view`);
         this.generateCornerRadius();
         this.generateFill();
         this.generateOpacity();
         this.generateBorders();
         this.generateShadow();
+    }
 
+    toString(): string {
         if (this.props.length == 0) {
-            return;
+            return null;
         }
         return `let ` + this.name + ` = ViewStyle(\n\t` + this.props.join(',\n\t') + `\n)`;
     }
@@ -49,7 +48,7 @@ class ViewStyle {
         if (this.layer.opacity === null || this.layer.opacity == 1) {
             return
         }
-        this.props.push(`.opacity(` + this.layer.opacity + `)`);
+        this.props.push(`.opacity(` + this.layer.opacity.toFixed(1) + `)`);
     }
 
     private generateBorders() {
