@@ -58,20 +58,8 @@ class TextStyle {
     }
 
     private generateParagraphStyle() {
-        let properties = [
-            this.alignment,
-            this.lineHeight
-        ].filter(notEmpty);
-
-        let style = `.paragraphStyle([\n\t\t` + properties.join(`,\n\t\t`) + `\n\t])`;
+        let style = `.paragraphStyle([\n\t\t` + this.alignment + `\n\t])`;
         this.props.push(style);
-    }
-
-    private get lineHeight(): string {
-        if (!this.textStyle.lineHeight) {
-            return null;
-        }
-        return `.lineHeight(` + this.textStyle.lineHeight + `)`;
     }
 
     private get alignment(): string {
