@@ -1,7 +1,3 @@
-export interface IStringConvertible {
-    toString(): string
-}
-
 export interface IColor {
     name: string
     r, g, b, a: number
