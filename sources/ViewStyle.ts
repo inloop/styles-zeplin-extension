@@ -1,4 +1,10 @@
-import { IContext, ILayer, IProject, IColor } from './Interfaces';
+import {
+    IContext,
+    ILayer,
+    IProject,
+    IColor,
+    IShadow
+} from './Interfaces';
 import { normalize, uicolor } from "./Utils";
 
 class ViewStyle {

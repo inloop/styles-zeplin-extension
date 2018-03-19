@@ -40,12 +40,7 @@ export function notEmpty<T>(value: T | null | undefined): value is T {
     return value !== null && value !== undefined;
 }
 
-Array.prototype.index = function <T>(where: (element: T) => boolean): number {
-    for (let i = 0; i < this.length; i++) {
-        let element = this[i];
-        if (where(element)) {
-            return i;
-        }
-    }
-    return null;
+String.prototype.appending = function (object, delimeter: string): string {
+    let json = JSON.stringify(object, null, 2);
+    return this + delimeter + json;
 }
